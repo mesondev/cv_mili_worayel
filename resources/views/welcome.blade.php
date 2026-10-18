@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Nusantara Kreasi - Mitra solusi bisnis dan transformasi digital terpercaya.">
+    <meta name="description" content="Informasi resmi CV MILI WORAYEL MAJU.">
     <meta name="theme-color" content="#0e2fd6">
     <link rel="manifest" href="/manifest.webmanifest">
-    <title>CV | MILI WORAYEL MAJU</title>
+    <title>CV MILI WORAYEL MAJU</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -41,10 +41,9 @@
         </nav>
         <div class="hero container">
             <div class="hero-content reveal">
-                <p class="eyebrow">EST. 2009 · INDONESIA</p>
-                <h1>Menciptakan masa depan bisnis yang <em>bermakna.</em></h1>
-                <p class="hero-copy" data-i18n="heroCopy">Kami menghadirkan solusi, produk, dan layanan terintegrasi
-                    untuk membantu bisnis Anda bertumbuh dengan pasti.</p>
+                <p class="eyebrow">CV MILI WORAYEL MAJU</p>
+                <h1>Solusi bisnis yang <em>terukur</em> dan <em>bermanfaat.</em></h1>
+                <p class="hero-copy" data-i18n="heroCopy">Kami menyajikan profil, layanan, dan karya yang diperbarui sesuai data resmi yang disetujui perusahaan.</p>
                 <div class="hero-buttons"><a class="button" href="#kontak" data-i18n="contactUs">Hubungi Kami
                         <span>→</span></a><a class="text-link" href="#tentang" data-i18n="viewProfile">Lihat Profil
                         <span>↓</span></a></div>
@@ -53,7 +52,7 @@
                 <div class="hero-orb orb-one"></div>
                 <div class="hero-orb orb-two"></div>
                 <div class="hero-card">
-                    <p>GROW WITH PURPOSE</p><strong>17</strong><span>tahun membangun<br>kepercayaan</span>
+                    <p>DATA RESMI</p><strong>CMS</strong><span>profil dan konten<br>terkelola aman</span>
                 </div>
                 <div class="visual-pattern">✦</div>
             </div>
@@ -66,15 +65,12 @@
             <div class="about-layout">
                 <div class="reveal">
                     <h2>Bergerak bersama, tumbuh lebih <em>besar.</em></h2>
-                    <p>Sejak 2009, Nusantara Kreasi menjadi mitra bagi berbagai organisasi untuk merancang solusi yang
-                        relevan, bertanggung jawab, dan berdampak.</p>
+                    <p>CV MILI WORAYEL MAJU hadir sebagai perusahaan yang menekankan komitmen, kerja profesional, dan nilai yang dapat dibuktikan lewat karya dan data yang dikelola secara resmi.</p>
                 </div>
                 <div class="about-info reveal">
-                    <p><b>Visi</b> Menjadi perusahaan Indonesia yang menggerakkan kemajuan melalui karya dan inovasi.
-                    </p>
-                    <p><b>Misi</b> Memberikan layanan unggul, membangun kolaborasi jangka panjang, dan menciptakan nilai
-                        berkelanjutan.</p><a href="#kontak" class="text-link">Unduh Company Profile PDF
-                        <span>↓</span></a>
+                    <p><b>Visi</b> Menjadi mitra terpercaya yang mendorong kemajuan melalui kerja profesional dan solusi yang berdampak.</p>
+                    <p><b>Misi</b> Menyediakan layanan dan layanan strategis yang sesuai kebutuhan, dikelola dengan integritas, dan siap berkembang bersama pelanggan.</p>
+                    <a href="#kontak" class="text-link">Hubungi kami untuk detail resmi <span>↓</span></a>
                 </div>
             </div>
             <div class="value-grid reveal">
@@ -83,26 +79,26 @@
                     <p>Kejujuran dalam setiap proses.</p>
                 </div>
                 <div><span>02</span>
-                    <h3>Kolaborasi</h3>
-                    <p>Tumbuh melalui kemitraan.</p>
+                    <h3>Komitmen</h3>
+                    <p>Tanggung jawab yang dapat dipercaya.</p>
                 </div>
                 <div><span>03</span>
-                    <h3>Inovasi</h3>
-                    <p>Berani menciptakan yang baru.</p>
+                    <h3>Profesional</h3>
+                    <p>Kerja yang terukur dan konsisten.</p>
                 </div>
                 <div><span>04</span>
-                    <h3>Keberlanjutan</h3>
-                    <p>Dampak baik untuk masa depan.</p>
+                    <h3>Kolaborasi</h3>
+                    <p>Bersama tumbuh dan berkembang.</p>
                 </div>
             </div>
         </section>
 
         <section class="statistics">
             <div class="container stats-grid">
-                <div class="reveal"><strong data-counter="250">0</strong><span>Klien terpercaya</span></div>
-                <div class="reveal"><strong data-counter="480">0</strong><span>Proyek terselesaikan</span></div>
-                <div class="reveal"><strong data-counter="75">0</strong><span>Talenta profesional</span></div>
-                <div class="reveal"><strong data-counter="17">0</strong><span>Tahun pengalaman</span></div>
+                <div class="reveal"><strong data-counter="0">0</strong><span>Proyek aktif</span></div>
+                <div class="reveal"><strong data-counter="0">0</strong><span>Produk layanan</span></div>
+                <div class="reveal"><strong data-counter="0">0</strong><span>Pengunjung</span></div>
+                <div class="reveal"><strong data-counter="0">0</strong><span>Data terverifikasi</span></div>
             </div>
         </section>
 
@@ -110,26 +106,26 @@
             <div class="section-heading reveal">
                 <div>
                     <div class="section-label">02 / TIM KAMI</div>
-                    <h2>Orang-orang di balik <em>karya.</em></h2>
+                    <h2>Profil tim akan diatur melalui CMS.</h2>
                 </div>
-                <p>Tim lintas keahlian yang digerakkan oleh rasa ingin tahu dan komitmen untuk memberi yang terbaik.</p>
+                <p>Informasi personal dan struktur tim harus diinput oleh administrator setelah data resmi dan disetujui perusahaan.</p>
             </div>
             <div class="org-grid">
                 <article class="person reveal">
-                    <div class="avatar a1">AR</div><span>Direktur Utama</span>
-                    <h3>Ardian Ramadhan</h3>
+                    <div class="avatar a1">CMS</div><span>Kelola tim</span>
+                    <h3>Data pegawai dapat ditambahkan di dashboard</h3>
                 </article>
                 <article class="person reveal">
-                    <div class="avatar a2">SA</div><span>Operations Manager</span>
-                    <h3>Sinta Aulia</h3>
+                    <div class="avatar a2">P</div><span>Publik</span>
+                    <h3>Hanya tampil jika dibuka untuk umum</h3>
                 </article>
                 <article class="person reveal">
-                    <div class="avatar a3">DP</div><span>Creative Supervisor</span>
-                    <h3>Dimas Pratama</h3>
+                    <div class="avatar a3">R</div><span>Resmi</span>
+                    <h3>Periksa data sebelum dipublikasikan</h3>
                 </article>
                 <article class="person reveal">
-                    <div class="avatar a4">MN</div><span>Business Staff</span>
-                    <h3>Maya Nurfadila</h3>
+                    <div class="avatar a4">A</div><span>Audit</span>
+                    <h3>Data internal tidak dipakai sembarangan</h3>
                 </article>
             </div>
         </section>

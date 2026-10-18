@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Middleware\EnsureAdminAccess;
+use App\Http\Middleware\EnsureAdminModuleAccess;
+use App\Http\Middleware\RecordPublicVisit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -14,7 +16,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias(['admin.access' => EnsureAdminAccess::class]);
+        $middleware->alias([
+            'admin.access' => EnsureAdminAccess::class,
+            'admin.module' => EnsureAdminModuleAccess::class,
+            'public.visit' => RecordPublicVisit::class,
+        ]);
         $middleware->redirectUsersTo(function (Request $request): string {
             $user = $request->user();
 

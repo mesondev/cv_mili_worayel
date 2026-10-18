@@ -1,59 +1,133 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# CV MILI WORAYEL MAJU
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi Laravel 12 untuk website perusahaan, pengelolaan konten, dan
+administrasi rekrutmen.
 
-## About Laravel
+## Persyaratan lokal
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.2 atau lebih baru dengan `pdo_mysql`; aktifkan ekstensi GD jika ingin
+  menjalankan seluruh pengujian unggah gambar.
+- Composer.
+- Node.js dan npm.
+- MariaDB/MySQL, misalnya XAMPP.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Menyiapkan aplikasi di Windows/XAMPP
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Jalankan perintah dari folder proyek `C:\xampp\htdocs\cv_mili_worayel`.
 
-## Learning Laravel
+1. Pasang dependensi PHP:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+   ```powershell
+   composer install
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. Salin `.env.example` menjadi `.env` bila belum ada. Atur koneksi lokal ke
+   database `db_worayel`. Gunakan akun database khusus aplikasi; jangan
+   menaruh kredensial produksi ke Git.
 
-## Laravel Sponsors
+3. Buat kunci aplikasi satu kali bila `APP_KEY` masih kosong:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+   ```powershell
+   php artisan key:generate
+   ```
 
-### Premium Partners
+   Jangan mengganti kunci pada instalasi yang sedang dipakai tanpa rencana
+   migrasi sesi dan data terenkripsi.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+4. Pastikan MariaDB aktif, lalu periksa dan jalankan migrasi tambahan:
 
-## Contributing
+   ```powershell
+   php artisan migrate:status
+   php artisan migrate
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+   Migrasi bersifat aditif. Jangan menjalankan `migrate:fresh` atau `db:wipe`
+   pada database yang berisi data.
 
-## Code of Conduct
+5. Siapkan role dan izin awal (perintah ini tidak membuat akun demo):
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   ```powershell
+   php artisan db:seed --class=AccessControlSeeder
+   ```
 
-## Security Vulnerabilities
+6. Buat administrator dengan prompt terminal privat:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   ```powershell
+   php artisan app:admin-create
+   ```
 
-## License
+   Password tidak ditampilkan kembali dan harus memenuhi aturan kekuatan
+   minimal. Pastikan email serta username administrator belum digunakan.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+7. Pasang dan buat aset frontend:
+
+   ```powershell
+   npm ci
+   npm run build
+   ```
+
+8. Jalankan aplikasi lokal:
+
+   ```powershell
+   php artisan serve
+   ```
+
+Seeder data contoh terpisah dari `DatabaseSeeder`. Jalankan
+`php artisan db:seed --class=DemoContentSeeder` hanya pada database development
+yang memang boleh berisi data contoh. Seeder tersebut bukan data perusahaan
+yang sudah diverifikasi.
+
+## Pengujian
+
+Jalankan tes dengan konfigurasi tes yang ditentukan di `phpunit.xml`:
+
+```powershell
+php artisan test
+```
+
+Pada instalasi XAMPP yang memiliki `php_gd.dll` tetapi ekstensi GD belum
+diaktifkan di `php.ini`, tes unggah gambar dapat dijalankan sementara dengan:
+
+```powershell
+php -d extension=C:\xampp\php\ext\php_gd.dll artisan test
+```
+
+Pengujian menggunakan SQLite in-memory dan tidak menghapus atau mereset
+`db_worayel`.
+
+## Peran dan izin admin
+
+Izin disimpan sebagai pasangan role-permission dan diperiksa pada server untuk
+setiap route/tindakan. Navigasi dashboard hanya menampilkan modul yang dapat
+diakses pengguna. Pemetaan izin awal berada di `config/admin.php` dan dapat
+diterapkan kembali secara idempoten melalui `AccessControlSeeder`.
+
+Super Admin memiliki akses penuh. Editor berfokus pada berita/SEO, HRD pada
+lowongan/lamaran/pegawai, Marketing pada konten pemasaran dan pesan, sedangkan
+Admin mengelola modul operasional yang ditentukan. Penyesuaian izin per role
+dilakukan melalui modul **Peran → Hak Akses**.
+
+## Rekrutmen dan data pelamar
+
+Lowongan aktif tersedia pada `/karir`. Pelamar harus memberi persetujuan
+pemrosesan data dan mengunggah CV PDF, DOC, atau DOCX maksimal 5 MB. Berkas
+disimpan pada disk privat Laravel, bukan direktori publik. Akses unduh hanya
+diberikan kepada pengguna dengan izin lamaran; perubahan status dan unduhan
+tercatat pada activity log.
+
+Tetapkan pemberitahuan privasi dan masa retensi data pelamar sebelum
+menggunakan formulir untuk rekrutmen sungguhan. Sesuaikan aturan file dengan
+kebijakan organisasi bila diperlukan.
+
+## Konfigurasi produksi
+
+- Gunakan `.env` yang terpisah dan tidak dilacak Git.
+- Atur `APP_ENV=production`, `APP_DEBUG=false`, serta `APP_URL` domain HTTPS.
+- Konfigurasikan SMTP/penyedia email sebelum mengandalkan verifikasi atau reset
+  password.
+- Gunakan akun runtime database dengan izin minimum; pisahkan akun deployment
+  yang menjalankan migrasi.
+- Konfigurasikan penyimpanan privat untuk berkas pelamar, backup, pemantauan,
+  dan prosedur pemulihan.
+- Verifikasi PHP Apache/FPM dan PHP CLI secara terpisah, termasuk ekstensi
+  yang diperlukan.

@@ -16,7 +16,6 @@ class CompanyProfileController extends Controller
 
         return response()->json([
             'name' => $profile?->name ?? 'CV MILI WORAYEL MAJU',
-            'ceo' => 'ROI JIRO WENDA',
             'tagline' => $profile?->tagline ?? 'Membangun nilai yang bertahan.',
             'description' => $profile?->description,
             'email' => $profile?->email,

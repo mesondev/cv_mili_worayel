@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
-        content="CV MILI WORAYEL MAJU - jasa konstruksi dan pembangunan profesional dari Jayapura, Papua.">
+        content="{{ $companyProfile?->description ? \Illuminate\Support\Str::limit(strip_tags($companyProfile->description), 160) : 'Informasi resmi CV MILI WORAYEL MAJU.' }}">
     <meta name="theme-color" content="#222a99">
     <title>CV MILI WORAYEL MAJU | Konstruksi</title>
     {{-- Memuat aset CSS dan JavaScript utama melalui Vite Laravel. --}}
@@ -106,18 +106,10 @@
             display: flex;
             align-items: center;
             overflow: hidden;
-            background: #062b55
+            background: radial-gradient(circle at 78% 30%, #176b5e 0, #0d3b35 35%, #062b55 100%)
         }
 
-        /* Empat layer gambar hero diputar bergantian; masing-masing memiliki jeda lima detik. */
-        .hero-slides, .hero-slides span { position: absolute; inset: 0; }
-        .hero-slides span { background: center/cover no-repeat; opacity: 0; animation: heroZoom 20s infinite; transform: scale(1); }
-        .hero-slides span:nth-child(1) { background-image: url('{{ asset('images/construction/hero-site.png') }}'); animation-delay: 0s; }
-        .hero-slides span:nth-child(2) { background-image: url('{{ asset('images/construction/project-commercial.png') }}'); animation-delay: 5s; }
-        .hero-slides span:nth-child(3) { background-image: url('{{ asset('images/construction/project (1).png') }}'); animation-delay: 10s; }
-        .hero-slides span:nth-child(4) { background-image: url('{{ asset('images/construction/project-engineering.png') }}'); animation-delay: 15s; }
-        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, #031f43f2 0%, #063c78d6 48%, #062b5570 100%); z-index: 1; }
-        @keyframes heroZoom { 0% { opacity: 0; transform: scale(1); } 5%, 23% { opacity: 1; } 28%, 100% { opacity: 0; transform: scale(1.14); } }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(90deg, #031f43a8 0%, #063c785c 55%, #062b5520 100%); z-index: 1; }
 
         .hero:after {
             content: "";
@@ -689,14 +681,12 @@
 
         .section-heading-center,
         #layanan .d-flex.flex-column,
-        #sertifikat .d-flex.flex-column,
         #testimoni .d-flex.flex-column,
         #tentang .col-lg-6:first-child,
         .commitment .col-lg-6:last-child,
         #faq .section-heading-center { text-align: center !important; }
         .section-heading-center .eyebrow,
         #layanan .eyebrow,
-        #sertifikat .eyebrow,
         #testimoni .eyebrow,
         #tentang .col-lg-6:first-child > .eyebrow,
         .commitment .col-lg-6:last-child > .eyebrow,
@@ -759,18 +749,17 @@
     <div class="topbar py-2">
         <div class="container d-flex justify-content-between align-items-center gap-3">
             <div class="topbar-social">
-                <a href="#kontak" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                <a href="#kontak" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
-                <a href="#kontak" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                <a href="#kontak" aria-label="Twitter atau X"><i class="bi bi-twitter-x"></i></a>
-                <span class="topbar-contact ms-2"><i class="bi bi-telephone-fill text-warning me-1"></i>+62 000 0000 0000</span>
-                <span class="topbar-contact"><i class="bi bi-envelope-fill text-warning me-1"></i>info@miliworayel.co.id</span>
+                @foreach($socialLinks as $socialLink)
+                    <a href="{{ $socialLink->url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ $socialLink->platform }}"><i class="{{ $socialLink->icon ?: 'bi bi-link-45deg' }}"></i></a>
+                @endforeach
+                @if($companyProfile?->phone)<a class="topbar-contact ms-2" href="tel:{{ preg_replace('/[^0-9+]/', '', $companyProfile->phone) }}"><i class="bi bi-telephone-fill text-warning me-1"></i>{{ $companyProfile->phone }}</a>@endif
+                @if($companyProfile?->email)<a class="topbar-contact" href="mailto:{{ $companyProfile->email }}"><i class="bi bi-envelope-fill text-warning me-1"></i>{{ $companyProfile->email }}</a>@endif
             </div>
             <div class="d-flex align-items-center gap-2">
                 @guest
                     <a href="{{ route('login') }}">Login</a><span class="text-white-50">/</span><a href="{{ route('register') }}">Daftar</a>
                 @else
-                    <a href="{{ route('login') }}">Login</a><span class="text-white-50">/</span><a href="{{ route('register') }}">Daftar</a>
+                    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
                 @endguest
                 <button class="header-tool ms-1" id="languageToggle" type="button" aria-label="Ganti bahasa">ID</button>
                 <button class="header-tool" id="themeToggle" type="button" aria-label="Ganti tema"><i class="bi bi-moon-stars"></i></button>
@@ -804,7 +793,6 @@
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Informasi</a>
                         <ul class="dropdown-menu dropdown-menu-dark shadow border-0">
                             <li><a class="dropdown-item" href="#mitra">Mitra Kerja</a></li>
-                            <li><a class="dropdown-item" href="#sertifikat">Sertifikat</a></li>
                             <li><a class="dropdown-item" href="#galeri">Galeri</a></li>
                             <li><a class="dropdown-item" href="#berita">Berita</a></li>
                             <li><a class="dropdown-item" href="#karir">Karir</a></li>
@@ -826,17 +814,13 @@
         </div>
     </nav>
 
-    {{-- Hero memakai empat gambar background dan tetap ringkas pada layar ponsel. --}}
     <header id="beranda" class="hero">
-        <div class="hero-slides" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
         <div class="hero-overlay" aria-hidden="true"></div>
         <div class="container hero-content">
             <div class="hero-copy">
-                <p class="eyebrow mb-3">KONSTRUKSI • JAYAPURA, PAPUA</p>
-                <h1 class="text-white">Membangun Papua dengan <span style="color:var(--gold)">integritas.</span>
-                </h1>
-                <p class="hero-description">CV MILI WORAYEL MAJU adalah mitra konstruksi profesional yang menghadirkan pembangunan
-                    infrastruktur aman, berkualitas, dan bermanfaat bagi masyarakat.</p>
+                <p class="eyebrow mb-3">{{ $companyProfile?->tagline ?: 'PROFIL PERUSAHAAN' }}</p>
+                <h1 class="text-white">{{ $companyProfile?->name ?: 'CV MILI WORAYEL MAJU' }} <span style="color:var(--gold)">resmi.</span></h1>
+                <p class="hero-description">{{ $companyProfile?->description ? \Illuminate\Support\Str::limit(strip_tags($companyProfile->description), 260) : 'Profil perusahaan, layanan, dan informasi yang telah disetujui untuk ditampilkan kepada publik.' }}</p>
                 <div class="d-flex flex-wrap gap-3 mt-4"><a class="btn btn-gold px-4 py-3" href="#layanan">Lihat Layanan <i
                             class="bi bi-arrow-down-right ms-2"></i></a><a class="btn btn-outline-light px-4 py-3"
                         href="#tentang">Profil Perusahaan</a></div>
@@ -851,18 +835,18 @@
     <section class="hero-stat">
         <div class="container">
             <div class="row g-3">
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg-4">
                     <div class="card h-100">
                         <div class="card-body d-flex gap-3 align-items-center">
                             <i class="bi bi-building"></i>
                             <div>
                                 <div class="display-number">{{ number_format($siteStats['projects']) }}</div>
-                                <small class="text-secondary">Proyek selesai</small>
+                                <small class="text-secondary">Proyek dipublikasikan</small>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg-4">
                     <div class="card h-100">
                         <div class="card-body d-flex gap-3 align-items-center">
                             <i class="bi bi-people"></i>
@@ -873,24 +857,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg-4">
                     <div class="card h-100">
                         <div class="card-body d-flex gap-3 align-items-center">
                             <i class="bi bi-person-workspace"></i>
                             <div>
                                 <div class="display-number">{{ number_format($siteStats['employees']) }}</div>
-                                <small class="text-secondary">Tenaga ahli</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 col-lg-3">
-                    <div class="card h-100">
-                        <div class="card-body d-flex gap-3 align-items-center">
-                            <i class="bi bi-calendar-check"></i>
-                            <div>
-                                <div class="display-number">{{ number_format($siteStats['experience_years']) }}</div>
-                                <small class="text-secondary">Tahun pengalaman</small>
+                                <small class="text-secondary">Profil pegawai publik</small>
                             </div>
                         </div>
                     </div>
@@ -904,58 +877,28 @@
             <div class="container">
                 <header class="public-section-header">
                     <p class="eyebrow">01 / TENTANG KAMI</p>
-                    <h2 class="section-title mt-2">Tumbuh bersama pembangunan <span>Papua.</span></h2>
-                    <p class="section-intro">Kami menghadirkan pekerjaan konstruksi yang terukur, aman, dan bermanfaat bagi masyarakat Papua.</p>
+                    <h2 class="section-title mt-2">{{ $companyProfile?->tagline ?: 'Profil resmi' }} <span>perusahaan.</span></h2>
+                    <p class="section-intro">{{ $companyProfile?->description ? \Illuminate\Support\Str::limit(strip_tags($companyProfile->description), 240) : 'Informasi profil perusahaan sedang dilengkapi. Silakan hubungi perusahaan untuk mendapatkan informasi resmi.' }}</p>
                 </header>
                 <div class="row align-items-center g-5">
                     <div class="col-lg-6">
-                        <p class="lead-copy mt-4">CV MILI WORAYEL MAJU merupakan perusahaan jasa konstruksi dan pembangunan
-                            yang didirikan di Kota Jayapura, Provinsi Papua. Kami hadir untuk berpartisipasi aktif dalam
-                            pembangunan infrastruktur yang berkualitas, berkelanjutan, dan memberikan manfaat nyata bagi
-                            masyarakat.</p>
-                        <p class="lead-copy">Berawal dari semangat membangun daerah, kami terus berkembang menjadi mitra
-                            yang profesional, terpercaya, dan berdaya saing di tingkat lokal, regional, maupun nasional.
-                            Kami menjalin kerja sama dengan instansi pemerintah, BUMN, perusahaan swasta, dan berbagai
-                            pemberi kerja lainnya.</p>
-                        <div class="company-leader" aria-label="Pimpinan perusahaan">
-                            <i class="bi bi-person-badge-fill" aria-hidden="true"></i>
-                            <div><small>CHIEF EXECUTIVE OFFICER</small><strong>ROI JIRO WENDA</strong></div>
-                        </div>
-                        <div class="row g-3 mt-2">
-                            <div class="col-sm-6">
-                                <div class="card value-card">
-                                    <div class="card-body">
-                                        <div class="value-icon mb-3">
-                                            <i class="bi bi-heart"></i>
-                                        </div>
-                                        <h3 class="h6 fw-bold">Bekerja dengan hati</h3>
-                                        <p class="small text-secondary mb-0">Penuh dedikasi dan mengutamakan kepuasan
-                                            mitra kerja.</p>
-                                    </div>
-                                </div>
+                        <p class="lead-copy mt-4">{{ $companyProfile?->description ?: 'Profil, sejarah, serta informasi resmi perusahaan akan ditampilkan di sini setelah dikelola dan dipublikasikan oleh administrator.' }}</p>
+                        @if($companyHistories->isNotEmpty())
+                            <h3 class="h5 fw-bold mt-4">Sejarah perusahaan</h3>
+                            <div class="d-grid gap-3 mt-3">
+                                @foreach($companyHistories as $history)
+                                    <article class="border-start border-success border-3 ps-3">
+                                        @if($history->year)<small class="text-success fw-bold">{{ $history->year }}</small>@endif
+                                        <h4 class="h6 fw-bold mb-1">{{ $history->title }}</h4>
+                                        @if($history->description)<p class="small text-secondary mb-0">{{ $history->description }}</p>@endif
+                                    </article>
+                                @endforeach
                             </div>
-                            <div class="col-sm-6">
-                                <div class="card value-card">
-                                    <div class="card-body">
-                                        <div class="value-icon mb-3">
-                                            <i class="bi bi-award"></i>
-                                        </div>
-                                        <h3 class="h6 fw-bold">Standar terbaik</h3>
-                                        <p class="small text-secondary mb-0">Mutu, waktu, keselamatan, dan kepercayaan
-                                            dijaga dalam setiap proyek.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @endif
                     </div>
                     <div class="col-lg-6">
-                        <div class="image-frame">
-                            <img src="{{ asset('images/construction/project-engineering.png') }}"
-                                alt="Tim konstruksi CV MILI WORAYEL MAJU di lokasi proyek" loading="lazy">
-                            <div class="image-note">
-                                <i class="bi bi-quote me-2">
-                                </i>Profesionalisme, transparansi, dan akuntabilitas adalah landasan kami.
-                            </div>
+                        <div class="image-frame d-flex align-items-center justify-content-center p-5 bg-white rounded-4 shadow-sm">
+                            <img class="img-fluid" style="max-height:260px;object-fit:contain" src="{{ asset('images/Logo-Mili.png') }}" alt="Logo CV MILI WORAYEL MAJU" loading="lazy">
                         </div>
                     </div>
                 </div>
@@ -966,24 +909,29 @@
             <div class="container">
                 <div class="section-heading-center text-center mb-5">
                     <p class="eyebrow">02 / ARAH PERUSAHAAN</p>
-                    <h2 class="section-title mt-2">Membangun masa depan yang <span>berkelanjutan.</span></h2>
+                    <h2 class="section-title mt-2">Visi dan misi <span>perusahaan.</span></h2>
                 </div>
                 <div class="row g-5">
                     <div class="col-lg-5">
                         <p class="eyebrow">VISI PERUSAHAAN</p>
                         <div class="mt-4 p-4 border border-light border-opacity-25 rounded-4">
                             <p class="small text-warning fw-bold mb-2">VISI</p>
-                            <p class="mb-0 fs-5 lh-base">Menjadi perusahaan konstruksi yang profesional, terpercaya, dan
-                                berdaya saing tinggi di tingkat lokal, regional, dan nasional dalam mendukung
-                                pembangunan infrastruktur yang berkualitas dan berkelanjutan.</p>
+                            @forelse($companyVisions as $vision)
+                                <p class="mb-3 fs-5 lh-base">{{ $vision->content }}</p>
+                            @empty
+                                <p class="mb-0 text-white-50">Informasi visi belum dipublikasikan.</p>
+                            @endforelse
                         </div>
                     </div>
                     <div class="col-lg-7">
                         <p class="eyebrow">MISI KAMI</p>
                         <div class="mt-3">
-                            @foreach(['Menyediakan layanan konstruksi berkualitas sesuai standar teknis dan kebutuhan pengguna jasa.', 'Menjunjung tinggi kejujuran, integritas, dan tanggung jawab dalam setiap pekerjaan.', 'Membangun kemitraan yang baik dengan pemerintah, swasta, dan masyarakat.', 'Mendukung program pembangunan nasional dan daerah melalui proyek yang efektif dan efisien.', 'Mengembangkan sumber daya manusia yang kompeten dan profesional.', 'Menjaga kepercayaan mitra kerja melalui pelayanan terbaik dan hasil berkualitas.'] as $index => $mission)
-                                <div class="mission-item d-flex gap-3"><b>0{{ $index + 1 }}</b><span>{{ $mission }}</span>
-                            </div>@endforeach</div>
+                            @forelse($companyMissions as $index => $mission)
+                                <div class="mission-item d-flex gap-3"><b>{{ str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) }}</b><span>{{ $mission->content }}</span></div>
+                            @empty
+                                <p class="text-white-50">Informasi misi belum dipublikasikan.</p>
+                            @endforelse
+                        </div>
                     </div>
                 </div>
             </div>
@@ -994,21 +942,40 @@
                 <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-5">
                     <div>
                         <p class="eyebrow">03 / BIDANG USAHA</p>
-                        <h2 class="section-title mt-2 mb-0">Solusi konstruksi dari perencanaan hingga <span>serah
-                                terima.</span></h2>
+                        <h2 class="section-title mt-2 mb-0">Layanan <span>perusahaan.</span></h2>
                     </div>
-                    <p class="text-secondary mb-0" style="max-width:370px">Kami memberikan layanan terintegrasi untuk
-                        mendukung proyek yang efektif, efisien, dan sesuai kebutuhan pengguna jasa.</p>
+                    <p class="text-secondary mb-0" style="max-width:370px">Informasi yang tampil di halaman ini telah diaktifkan untuk publik oleh pengelola.</p>
                 </div>
                 <div class="row g-4">
-                    @foreach([['bi-buildings', 'Konstruksi Bangunan Gedung', ['Pembangunan gedung perkantoran', 'Pembangunan sekolah & rumah dinas', 'Rumah tinggal & tempat ibadah', 'Renovasi dan rehabilitasi bangunan']], ['bi-signpost-split', 'Konstruksi Sipil', ['Pembangunan & peningkatan jalan', 'Pembangunan jembatan', 'Drainase dan saluran air', 'Talud, penahan tanah & infrastruktur kawasan']], ['bi-droplet-half', 'Konstruksi Sumber Daya Air', ['Irigasi dan embung', 'Reservoir', 'Jaringan air bersih', 'Sistem pengendalian banjir']], ['bi-hammer', 'Konstruksi Khusus', ['Pekerjaan baja dan beton', 'Atap & rangka baja ringan', 'Pekerjaan pengecatan', 'Interior dan eksterior']], ['bi-clipboard-data', 'Jasa Pendukung Konstruksi', ['Perencanaan proyek', 'Pengawasan proyek', 'Manajemen konstruksi', 'Survey, pengukuran & konsultasi teknis']], ['bi-house-door', 'Perumahan', ['Pembangunan perumahan', 'Kawasan permukiman', 'Rumah tinggal', 'Pekerjaan prasarana lingkungan']], ['bi-lightning-charge', 'Instalasi Listrik', ['Instalasi listrik bangunan', 'Panel dan jaringan internal', 'Penerangan area', 'Pemeriksaan instalasi']], ['bi-droplet', 'Instalasi Air Bersih', ['Distribusi air bersih', 'Pipa dan pompa air', 'Reservoir pendukung', 'Sistem sanitasi dasar']]] as [$icon, $title, $items])
+                    @forelse($services as $service)
                         <div class="col-md-6 col-xl">
                             <article class="card service-card">
-                                <div class="service-icon mb-4"><i class="bi {{ $icon }}"></i></div>
-                                <h3>{{ $title }}</h3>
-                                <ul class="mb-0 mt-3">@foreach($items as $item)<li>{{ $item }}</li>@endforeach</ul>
+                                <div class="service-icon mb-4"><i class="bi {{ $service->icon ?: 'bi-briefcase' }}"></i></div>
+                                <h3>{{ $service->name }}</h3>
+                                @if($service->excerpt)<p class="mb-0 mt-3">{{ $service->excerpt }}</p>@endif
                             </article>
-                    </div>@endforeach</div>
+                        </div>
+                    @empty
+                        <div class="col-12"><p class="text-secondary">Informasi layanan belum tersedia.</p></div>
+                    @endforelse
+                </div>
+                @if($products->isNotEmpty())
+                    <div class="mt-5">
+                        <h3 class="h4 fw-bold mb-4">Produk yang dipublikasikan</h3>
+                        <div class="row g-4">
+                            @foreach($products as $product)
+                                <div class="col-md-6 col-lg-4">
+                                    <article class="card service-card h-100">
+                                        @if($product->image)<img class="img-fluid rounded-3 mb-4" src="{{ \Illuminate\Support\Str::startsWith($product->image, 'products/') ? asset('storage/'.$product->image) : asset($product->image) }}" alt="{{ $product->name }}" loading="lazy">@endif
+                                        <h4 class="h5 fw-bold">{{ $product->name }}</h4>
+                                        @if($product->excerpt)<p class="mb-0 mt-3">{{ $product->excerpt }}</p>@endif
+                                        @if($product->price !== null)<p class="mb-0 mt-3 fw-bold">Rp {{ number_format((float) $product->price, 0, ',', '.') }}</p>@endif
+                                    </article>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
         </section>
 
@@ -1016,68 +983,68 @@
             <div class="container">
                 <div class="section-heading-center mb-4">
                 <p class="eyebrow">04 / KAPABILITAS PROYEK</p>
-                    <h2 class="section-title mt-2 mb-3">Dikerjakan dengan presisi, dijaga dengan <span>tanggung jawab.</span></h2>
-                    <div class="project-filter" role="group" aria-label="Filter proyek">
-                        <button type="button" class="active" data-filter="all">Semua</button><button type="button" data-filter="gedung">Gedung</button><button type="button" data-filter="jalan">Jalan</button><button type="button" data-filter="jembatan">Jembatan</button><button type="button" data-filter="perumahan">Perumahan</button><button type="button" data-filter="infrastruktur">Infrastruktur</button>
-                    </div>
+                    <h2 class="section-title mt-2 mb-3">Proyek yang telah <span>dipublikasikan.</span></h2>
+                    @if($projects->isNotEmpty())
+                        <div class="project-filter" role="group" aria-label="Filter proyek">
+                            <button type="button" class="active" data-filter="all">Semua</button>
+                            @foreach($projects->whereNotNull('category_slug')->unique('category_slug') as $category)
+                                <button type="button" data-filter="{{ $category->category_slug }}">{{ $category->category_name }}</button>
+                            @endforeach
+                        </div>
+                    @endif
                 </div></div>
                 <div class="row g-3" id="projectGrid">
-                    @foreach($projects as $project)
-                        <div class="col-md-6 col-lg-4 project-filter-item" data-category="infrastruktur">
-                            <article class="project"><img src="{{ asset($project->cover_image ?: 'images/construction/hero-site.png') }}" alt="{{ $project->title }}" loading="lazy">
+                    @forelse($projects as $project)
+                        <div class="col-md-6 col-lg-4 project-filter-item" data-category="{{ $project->category_slug ?: '' }}">
+                            <article class="project">
+                                @if($project->cover_image)
+                                    @php($projectImage = \Illuminate\Support\Str::startsWith($project->cover_image, 'projects/') ? asset('storage/'.$project->cover_image) : asset($project->cover_image))
+                                    <img src="{{ $projectImage }}" alt="{{ $project->title }}" loading="lazy">
+                                @endif
                                 <div><small>PROYEK</small><h3 class="h5 fw-bold mt-2 mb-0">{{ $project->title }}</h3>
-                                    <p class="project-detail mb-2"><span><i class="bi bi-geo-alt me-1"></i>{{ $project->client_name ?: 'Papua' }}</span><span><i class="bi bi-calendar3 me-1"></i>{{ $project->completed_at ? date('Y', strtotime($project->completed_at)) : 'Berjalan' }}</span><span><i class="bi bi-check-circle me-1"></i>Selesai</span></p>
+                                    <p class="project-detail mb-2">
+                                        @if($project->category_name)<span><i class="bi bi-tag me-1"></i>{{ $project->category_name }}</span>@endif
+                                        @if($project->completed_at)<span><i class="bi bi-calendar3 me-1"></i>{{ date('Y', strtotime($project->completed_at)) }}</span>@endif
+                                    </p>
                                     <a class="text-warning fw-bold small text-decoration-none" href="{{ route('projects.show', $project->slug) }}">Baca selengkapnya <i class="bi bi-arrow-right"></i></a>
                                 </div>
                             </article>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="col-12"><p class="text-secondary">Belum ada proyek yang dipublikasikan.</p></div>
+                    @endforelse
                 </div>
             </div>
         </section>
 
         <section class="section commitment">
             <div class="container">
-                <div class="row g-5 align-items-center">
-                    <div class="col-lg-6"><img class="img-fluid rounded-4 shadow-sm"
-                            src="{{ asset('images/construction/proyect (3).png') }}"
-                            alt="Pekerjaan konstruksi berkualitas" loading="lazy"></div>
-                    <div class="col-lg-6">
-                        <p class="eyebrow">05 / KOMITMEN PERUSAHAAN</p>
-                        <h2 class="section-title mt-2">Mitra terpercaya dalam setiap <span>pembangunan.</span></h2>
-                        <p class="lead-copy mt-4">CV MILI WORAYEL MAJU mengutamakan kualitas, ketepatan waktu, keselamatan
-                            kerja, serta kepuasan pengguna jasa. Kami percaya pembangunan yang baik adalah pembangunan
-                            yang memberikan manfaat jangka panjang bagi masyarakat dan daerah.</p>
-                        <p class="quote mt-4">“Membangun Dengan Integritas, Berkarya Dengan Kualitas, dan Menjaga
-                            Kepercayaan Untuk Kemajuan Papua dan Indonesia.”</p>
-                    </div>
+                <div class="section-heading-center text-center">
+                    <p class="eyebrow">05 / INFORMASI PERUSAHAAN</p>
+                    <h2 class="section-title mx-auto mt-2">Informasi resmi <span>terkelola.</span></h2>
+                    <p class="lead-copy mx-auto mt-4">Konten pada halaman ini ditampilkan setelah diperbarui dan dipublikasikan oleh pengelola yang berwenang.</p>
                 </div>
             </div>
         </section>
 
-        {{-- Logo mitra digerakkan dalam dua arah agar kolaborasi tampak hidup tanpa mengganggu pembacaan. --}}
         <section id="mitra" class="section partners">
             <div class="container text-center">
                 <div class="section-heading-center"><p class="eyebrow">06 / MITRA KERJA</p>
-                <h2 class="section-title mx-auto mt-2">Bertumbuh melalui <span>kolaborasi.</span></h2>
-                <p class="lead-copy mx-auto mt-3">Kami siap membangun kemitraan profesional dengan pemerintah, BUMN, swasta, dan masyarakat.</p>
+                <h2 class="section-title mx-auto mt-2">Mitra <span>perusahaan.</span></h2>
+                <p class="lead-copy mx-auto mt-3">Daftar mitra ditampilkan berdasarkan data yang telah diaktifkan untuk publik.</p>
                 </div>
-                @php($partnerLogos = [['bi-buildings','logo-papua','Pemerintah Provinsi Papua',null],['bi-building','logo-jayapura','Pemerintah Kota Jayapura',null],['bi-geo-alt','logo-jayapura','Pemerintah Kabupaten Jayapura','images/partners/kabupaten-jayapura.jpeg'],['bi-lightning-charge','logo-pln','PLN','images/partners/pln.png'],['bi-broadcast-pin','logo-telkom','Telkom Indonesia','images/partners/telkom.png'],['bi-fuel-pump','logo-pertamina','Pertamina','images/partners/pertamina.svg'],['bi-bank','logo-bumn','BUMN','images/partners/bumn.svg'],['bi-briefcase','logo-swasta','Mitra Swasta',null]])
-                <div class="logo-marquee mt-4" aria-label="Logo mitra kerja bergerak dari kanan ke kiri"><div class="logo-track">@foreach(array_merge($partnerLogos, $partnerLogos) as [$icon, $class, $partner, $logo])<div class="partner-card">@if($logo)<img class="partner-image" src="{{ asset($logo) }}" alt="Logo {{ $partner }}">@else<span class="partner-logo {{ $class }}"><i class="bi {{ $icon }}"></i></span>@endif<span>{{ $partner }}</span></div>@endforeach</div></div>
-                <div class="logo-marquee mt-3" aria-label="Logo mitra kerja bergerak dari kiri ke kanan"><div class="logo-track reverse">@foreach(array_merge($partnerLogos, $partnerLogos) as [$icon, $class, $partner, $logo])<div class="partner-card">@if($logo)<img class="partner-image" src="{{ asset($logo) }}" alt="Logo {{ $partner }}">@else<span class="partner-logo {{ $class }}"><i class="bi {{ $icon }}"></i></span>@endif<span>{{ $partner }}</span></div>@endforeach</div></div>
-            </div>
-        </section>
-
-        <section id="sertifikat" class="section">
-            <div class="container">
-                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-5">
-                    <div class="section-heading-center w-100"><p class="eyebrow">07 / LEGALITAS & SERTIFIKAT</p><h2 class="section-title mt-2 mb-2">Bekerja dengan standar yang <span>terverifikasi.</span></h2><p class="text-secondary mb-0 mx-auto" style="max-width:560px">Dokumen legalitas dan sertifikasi dapat disampaikan kepada calon mitra sesuai prosedur yang berlaku.</p></div>
-                </div>
-                <div class="row g-4">
-                    @foreach([['bi-patch-check', 'NIB', 'Nomor Induk Berusaha'], ['bi-receipt', 'NPWP', 'Administrasi perpajakan perusahaan'], ['bi-building-check', 'SBU', 'Sertifikat Badan Usaha'], ['bi-award', 'ISO', 'Sistem manajemen mutu'], ['bi-shield-check', 'K3', 'Komitmen keselamatan kerja'], ['bi-file-earmark-text', 'SK Kemenkumham', 'Dokumen pengesahan badan usaha']] as [$icon, $name, $description])
-                        <div class="col-md-6 col-lg-4"><article class="certificate-card"><i class="bi {{ $icon }}"></i><h3 class="h5 fw-bold mt-3">{{ $name }}</h3><p class="text-secondary small">{{ $description }}</p><a href="#kontak" class="btn btn-outline-success btn-sm">Minta Dokumen <i class="bi bi-arrow-right ms-1"></i></a></article></div>
-                    @endforeach
-                </div>
+                @if($partners->isEmpty())
+                    <p class="text-secondary mt-4">Belum ada mitra yang dipublikasikan.</p>
+                @else
+                    <div class="row g-3 mt-3">
+                        @foreach($partners as $partner)
+                            <div class="col-6 col-md-4 col-lg-3"><article class="partner-card h-100">
+                                @if($partner->logo)<img class="partner-image" src="{{ \Illuminate\Support\Str::startsWith($partner->logo, 'partners/') ? asset('storage/'.$partner->logo) : asset($partner->logo) }}" alt="Logo {{ $partner->name }}" loading="lazy">@endif
+                                <span>{{ $partner->name }}</span>
+                            </article></div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </section>
 
@@ -1092,27 +1059,24 @@
 
                 </div>
                 <div class="row g-4">
-                    @foreach([
-                        ['YK', 'Yohanes Kogoya', 'Perwakilan Mitra Proyek', 'Tim CV MILI WORAYEL MAJU bekerja rapi, terbuka dalam koordinasi, dan serius menjaga kualitas pekerjaan. Progres proyek dapat kami pantau dengan jelas dari awal sampai selesai.', 'images/testimoni-yohanes.png'],
-                        ['MR', 'Maria Rumere', 'Pemilik Usaha', 'Kami terbantu sejak tahap konsultasi hingga pelaksanaan renovasi. Tim memberikan solusi yang sesuai kebutuhan dan menyelesaikan pekerjaan dengan hasil yang memuaskan.'],
-                        ['DP', 'Daniel Prawira', 'Manajer Operasional', 'Komitmen terhadap keselamatan, jadwal, dan detail teknis terasa dalam setiap proses. CV MILI WORAYEL MAJU adalah mitra yang dapat diandalkan untuk pekerjaan konstruksi.']
-                    ] as $testimonial)
-                        @php([$initial, $name, $role, $quote, $photo] = array_pad($testimonial, 5, null))
+                    @forelse($testimonials as $testimonial)
                         <div class="col-md-6 col-lg-4">
                             <article class="testimonial-card">
                                 <i class="bi bi-quote quote-icon" aria-hidden="true"></i>
-                                <blockquote>“{{ $quote }}”</blockquote>
+                                <blockquote>“{{ $testimonial->content }}”</blockquote>
                                 <div class="testimonial-person">
-                                    @if($photo)<img class="testimonial-photo" src="{{ asset($photo) }}" alt="{{ $name }}">@else<span class="testimonial-avatar">{{ $initial }}</span>@endif
+                                    @if($testimonial->photo)<img class="testimonial-photo" src="{{ \Illuminate\Support\Str::startsWith($testimonial->photo, 'testimonials/') ? asset('storage/'.$testimonial->photo) : asset($testimonial->photo) }}" alt="{{ $testimonial->client_name }}" loading="lazy">@else<span class="testimonial-avatar">{{ mb_strtoupper(mb_substr($testimonial->client_name, 0, 1)) }}</span>@endif
                                     <div>
-                                        <strong class="d-block">{{ $name }}</strong>
-                                        <small class="text-secondary">{{ $role }}</small>
-                                        <div class="testimonial-stars" aria-label="Rating lima bintang">★★★★★</div>
+                                        <strong class="d-block">{{ $testimonial->client_name }}</strong>
+                                        @if($testimonial->position || $testimonial->company)<small class="text-secondary">{{ collect([$testimonial->position, $testimonial->company])->filter()->implode(' · ') }}</small>@endif
+                                        <div class="testimonial-stars" aria-label="Rating {{ $testimonial->rating }} dari 5">{{ str_repeat('★', max(0, min(5, (int) $testimonial->rating))) }}</div>
                                     </div>
                                 </div>
                             </article>
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="col-12"><p class="text-secondary">Belum ada testimoni yang dipublikasikan.</p></div>
+                    @endforelse
                 </div>
             </div>
         </section>
@@ -1129,12 +1093,11 @@
                     <div class="col-lg-7">
                         <div class="accordion" id="faqAccordion">
                             @foreach([
-                                ['Apa saja layanan yang ditangani CV MILI WORAYEL MAJU?', 'Kami menangani konstruksi bangunan gedung, pekerjaan sipil, sumber daya air, konstruksi khusus, serta layanan pendukung seperti perencanaan, pengawasan, dan konsultasi teknis.'],
-                                ['Apakah dapat melakukan konsultasi sebelum proyek dimulai?', 'Ya. Kami menyediakan konsultasi awal untuk memahami kebutuhan, ruang lingkup pekerjaan, kondisi lokasi, dan langkah persiapan proyek.'],
-                                ['Wilayah mana yang dapat dilayani?', 'Kami berbasis di Kota Jayapura dan melayani kebutuhan proyek di Papua. Untuk lokasi lain, silakan hubungi tim kami agar kebutuhan pelaksanaan dapat dibahas terlebih dahulu.'],
-                                ['Bagaimana proses mendapatkan penawaran proyek?', 'Kirimkan kebutuhan proyek melalui formulir kontak. Tim kami akan menghubungi Anda untuk mengumpulkan informasi, melakukan peninjauan bila diperlukan, lalu menyusun penawaran yang sesuai.'],
-                                ['Bagaimana CV MILI WORAYEL MAJU menjaga mutu dan keselamatan kerja?', 'Setiap pekerjaan dijalankan sesuai kebutuhan teknis, dengan pengawasan pelaksanaan, koordinasi rutin, dan perhatian terhadap standar keselamatan kerja di lokasi proyek.'],
-                                ['Apakah perusahaan dapat bekerja sama dengan instansi pemerintah maupun swasta?', 'Ya. Kami terbuka untuk kemitraan dengan instansi pemerintah, BUMN, perusahaan swasta, serta pemberi kerja lainnya sesuai ketentuan dan kebutuhan proyek.']
+                                ['Bagaimana melihat informasi layanan?', 'Halaman ini hanya menampilkan layanan yang dikelola dan diaktifkan untuk publik. Hubungi perusahaan melalui formulir untuk meminta informasi lebih lanjut.'],
+                                ['Bagaimana melihat proyek perusahaan?', 'Daftar proyek hanya memuat item yang telah dipublikasikan oleh pengelola. Informasi yang tidak disetujui untuk publikasi tidak ditampilkan.'],
+                                ['Bagaimana mengirim pertanyaan?', 'Gunakan formulir kontak pada halaman ini. Pesan akan disimpan untuk ditindaklanjuti oleh petugas perusahaan.'],
+                                ['Bagaimana melamar pekerjaan?', 'Periksa halaman Karier untuk melihat posisi aktif, persyaratan, batas waktu, dan tautan lamaran.'],
+                                ['Bagaimana data lamaran diproses?', 'Baca Kebijakan Privasi Rekrutmen sebelum mengirim lamaran. CV disimpan secara privat dan aksesnya dibatasi kepada petugas berwenang.']
                             ] as $index => [$question, $answer])
                                 <div class="accordion-item">
                                     <h3 class="accordion-header" id="faqHeading{{ $index }}">
@@ -1157,31 +1120,40 @@
                     <div><p class="eyebrow">09 / GALERI PROYEK</p>
                     <h2 class="section-title mt-2 mb-0">Dokumentasi dari setiap
                         <span>tahap pembangunan.</span></h2></div>
-                    <p class="text-secondary mb-0" style="max-width:380px">Kumpulan dokumentasi lapangan, proses kerja, dan hasil proyek kami.</p>
+                    <p class="text-secondary mb-0" style="max-width:380px">Dokumentasi yang telah dipublikasikan oleh pengelola perusahaan.</p>
                 </div>
-                <div class="gallery-grid">
-                    @php($galleryItems = $galleries->isNotEmpty() ? $galleries->map(fn ($gallery) => [$gallery->file_path, $gallery->caption ?: $gallery->title]) : collect([['images/construction/hero-site.png', 'Dokumentasi pekerjaan konstruksi'], ['images/construction/project-commercial.png', 'Pembangunan gedung'], ['images/construction/project (1).png', 'Pekerjaan infrastruktur'], ['images/construction/proyect (2).png', 'Koordinasi lapangan'], ['images/construction/project-engineering.png', 'Tim teknis proyek']]))
-                    @foreach($galleryItems as [$image, $caption])
-                        @php($imageUrl = \Illuminate\Support\Str::startsWith($image, 'galleries/') ? asset('storage/'.$image) : asset($image))
-                        <a class="gallery-item" href="{{ $imageUrl }}" target="_blank" rel="noopener"><img src="{{ $imageUrl }}" alt="{{ $caption }}" loading="lazy"><span>{{ $caption }} <i class="bi bi-arrow-up-right ms-1"></i></span></a>
-                    @endforeach
-                </div>
-                <div class="ratio ratio-16x9 mt-4 rounded-4 overflow-hidden shadow-sm bg-dark video-placeholder text-center text-white p-4"><div><i class="bi bi-play-circle display-4 text-warning"></i><h3 class="h4 mt-3">Video Dokumentasi Proyek</h3><p class="text-white-50 mb-0">Tautkan video drone atau dokumentasi resmi perusahaan di bagian ini.</p></div></div>
+                @if($galleries->isEmpty())
+                    <p class="text-secondary">Belum ada dokumentasi yang dipublikasikan.</p>
+                @else
+                    <div class="gallery-grid">
+                        @foreach($galleries as $gallery)
+                            @if($gallery->file_path)
+                                @php($imageUrl = \Illuminate\Support\Str::startsWith($gallery->file_path, 'galleries/') ? asset('storage/'.$gallery->file_path) : asset($gallery->file_path))
+                                <a class="gallery-item" href="{{ $imageUrl }}" target="_blank" rel="noopener"><img src="{{ $imageUrl }}" alt="{{ $gallery->alt_text ?: $gallery->caption ?: $gallery->title }}" loading="lazy"><span>{{ $gallery->caption ?: $gallery->title }} <i class="bi bi-arrow-up-right ms-1"></i></span></a>
+                            @endif
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </section>
 
         <section id="berita" class="section">
             <div class="container">
-                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-5"><div><p class="eyebrow">10 / BERITA TERBARU</p><h2 class="section-title mt-2 mb-0">Kabar dan wawasan dari <span>lapangan.</span></h2></div><a href="#kontak" class="btn btn-outline-success">Berlangganan informasi <i class="bi bi-arrow-right ms-1"></i></a></div>
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-5"><div><p class="eyebrow">10 / BERITA TERBARU</p><h2 class="section-title mt-2 mb-0">Informasi <span>perusahaan.</span></h2></div><a href="#kontak" class="btn btn-outline-success">Hubungi Kami <i class="bi bi-arrow-right ms-1"></i></a></div>
                 <div class="row g-4">
-                    @foreach($newsItems as $article) @php($image = $article->cover_image ?: 'images/construction/hero-site.png') @php($category = 'BERITA') @php($title = $article->title) @php($date = \Illuminate\Support\Carbon::parse($article->published_at)->translatedFormat('d F Y'))
-                        <div class="col-md-6 col-lg-4"><article class="news-card card"><img src="{{ asset($image) }}" alt="{{ $title }}" loading="lazy"><div class="card-body"><p class="news-date mb-2">{{ $category }} · {{ $date }}</p><h3 class="h5 fw-bold">{{ $title }}</h3><p class="small text-secondary">Informasi terkini seputar pelaksanaan proyek dan komitmen perusahaan.</p><a href="{{ route('news.show', \Illuminate\Support\Str::slug($title)) }}" class="text-success fw-bold small text-decoration-none">Baca selengkapnya <i class="bi bi-arrow-right"></i></a></div></article></div>
-                    @endforeach
+                    @forelse($newsItems as $article)
+                        <div class="col-md-6 col-lg-4"><article class="news-card card">
+                            @if($article->cover_image)<img src="{{ \Illuminate\Support\Str::startsWith($article->cover_image, 'news/') ? asset('storage/'.$article->cover_image) : asset($article->cover_image) }}" alt="{{ $article->title }}" loading="lazy">@endif
+                            <div class="card-body"><p class="news-date mb-2">{{ $article->category_name ?: 'Berita' }} · {{ \Illuminate\Support\Carbon::parse($article->published_at)->translatedFormat('d F Y') }}</p><h3 class="h5 fw-bold">{{ $article->title }}</h3>@if($article->excerpt)<p class="small text-secondary">{{ \Illuminate\Support\Str::limit(strip_tags($article->excerpt), 160) }}</p>@endif<a href="{{ route('news.show', $article->slug) }}" class="text-success fw-bold small text-decoration-none">Baca selengkapnya <i class="bi bi-arrow-right"></i></a></div>
+                        </article></div>
+                    @empty
+                        <div class="col-12"><p class="text-secondary">Belum ada berita yang dipublikasikan.</p></div>
+                    @endforelse
                 </div>
             </div>
         </section>
 
-        <section id="karir" class="section pt-0"><div class="container"><div class="career-panel p-4 p-md-5"><div class="row align-items-center g-4"><div class="col-lg-8"><p class="eyebrow">11 / KARIR</p><h2 class="section-title mt-2">Bertumbuh bersama tim yang <span>membangun.</span></h2><p class="text-white-50 mb-0">Kami membuka peluang bagi Site Engineer, Supervisor, Drafter, Surveyor, dan Admin Proyek. Kirimkan CV Anda untuk proses seleksi berikutnya.</p></div><div class="col-lg-4 text-lg-end"><a href="mailto:karir@miliworayel.co.id?subject=Lamaran%20Kerja" class="btn btn-gold px-4 py-3">Kirim CV via Email <i class="bi bi-send ms-2"></i></a></div></div></div></div></section>
+        <section id="karir" class="section pt-0"><div class="container"><div class="career-panel p-4 p-md-5"><div class="row align-items-center g-4"><div class="col-lg-8"><p class="eyebrow">11 / KARIR</p><h2 class="section-title mt-2">Bertumbuh bersama tim yang <span>membangun.</span></h2><p class="text-white-50 mb-0">Temukan lowongan yang tersedia dan kirim lamaran dengan aman melalui formulir rekrutmen kami.</p></div><div class="col-lg-4 text-lg-end"><a href="{{ route('careers.index') }}" class="btn btn-gold px-4 py-3">Lihat lowongan <i class="bi bi-arrow-right ms-2"></i></a></div></div></div></div></section>
 
         <section id="kontak" class="section pt-0">
             <div class="container">
@@ -1190,11 +1162,10 @@
                         <div class="col-lg-5">
                             <p class="eyebrow">HUBUNGI KAMI</p>
                             <h2 class="display-6 fw-bold mt-2">Mulai proyek Anda bersama kami.</h2>
-                            <p class="text-white-50 mt-3">Sampaikan kebutuhan konstruksi Anda. Tim CV MILI WORAYEL MAJU siap
-                                membantu dengan solusi yang tepat.</p>
+                            <p class="text-white-50 mt-3">Kirim pertanyaan atau informasi yang perlu ditindaklanjuti oleh perusahaan.</p>
                             <div class="mt-4">
-                                <p><i class="bi bi-geo-alt-fill text-warning me-2"></i>Kota Jayapura, Papua</p>
-                                <p><i class="bi bi-building-check text-warning me-2"></i>CV MILI WORAYEL MAJU</p>
+                                @if($companyProfile?->address)<p><i class="bi bi-geo-alt-fill text-warning me-2"></i>{{ $companyProfile->address }}</p>@endif
+                                <p><i class="bi bi-building-check text-warning me-2"></i>{{ $companyProfile?->name ?: 'CV MILI WORAYEL MAJU' }}</p>
                             </div>
                         </div>
                         <div class="col-lg-7">@if(session('contact_success'))
@@ -1230,8 +1201,7 @@
                             <small class="d-block text-warning fw-normal">KONSTRUKSI PAPUA</small>
                         </div>
                     </div>
-                    <p class="mt-3 mb-0 small">Membangun infrastruktur aman, berkualitas, dan berkelanjutan untuk
-                        kemajuan Papua dan Indonesia.</p>
+                    @if($companyProfile?->tagline)<p class="mt-3 mb-0 small">{{ $companyProfile->tagline }}</p>@endif
                 </div>
                 <div class="col-6 col-lg-2">
                     <h3 class="h6 text-white">Navigasi</h3>
@@ -1244,28 +1214,24 @@
                 <div class="col-md-6 col-lg-3">
                     <h3 class="h6 text-white">Hubungi Kami</h3>
                     <ul class="footer-detail">
-                        <li><i class="bi bi-geo-alt-fill"></i><span>Jayapura, Papua, Indonesia</span></li>
-                        <li><i class="bi bi-envelope-fill"></i><a href="mailto:info@miliworayel.co.id">info@miliworayel.co.id</a></li>
-                        <li><i class="bi bi-whatsapp"></i><a href="https://wa.me/6281234567890" target="_blank" rel="noopener">+62 812 0000 0000</a></li>
+                        @if($companyProfile?->address)<li><i class="bi bi-geo-alt-fill"></i><span>{{ $companyProfile->address }}</span></li>@endif
+                        @if($companyProfile?->email)<li><i class="bi bi-envelope-fill"></i><a href="mailto:{{ $companyProfile->email }}">{{ $companyProfile->email }}</a></li>@endif
+                        @if($companyProfile?->phone)<li><i class="bi bi-telephone-fill"></i><a href="tel:{{ preg_replace('/[^0-9+]/', '', $companyProfile->phone) }}">{{ $companyProfile->phone }}</a></li>@endif
+                        @if($companyProfile?->whatsapp)<li><i class="bi bi-whatsapp"></i><a href="https://wa.me/{{ preg_replace('/\D/', '', $companyProfile->whatsapp) }}" target="_blank" rel="noopener noreferrer">{{ $companyProfile->whatsapp }}</a></li>@endif
                     </ul>
                 </div>
                 <div class="col-lg-3">
                     <h3 class="h6 text-white">Manajemen</h3>
-                    <div class="footer-ceo">
-                        <i class="bi bi-person-badge-fill" aria-hidden="true"></i>
-                        <div><small>CHIEF EXECUTIVE OFFICER</small><strong>ROI JIRO WENDA</strong></div>
-                    </div>
-                    <p class="small mb-0">Profesional • Terpercaya • Berintegritas</p>
+                    <p class="small mb-0">Informasi resmi perusahaan dikelola oleh administrator yang berwenang.</p>
                 </div>
             </div>
             <hr class="border-secondary my-4">
             <small>© {{ date('Y') }} CV MILI WORAYEL MAJU. Seluruh hak dilindungi.</small>
         </div>
     </footer>
-    {{-- Tautan kontak cepat; nomor WhatsApp dapat diganti melalui href bila nomor bisnis berubah. --}}
     <div class="quick-contact" aria-label="Kontak cepat">
-        <a class="whatsapp" href="https://wa.me/6281234567890?text=Halo%20CV%20MILI%20WORAYEL%20MAJU%2C%20saya%20ingin%20konsultasi%20proyek." target="_blank" rel="noopener" aria-label="Hubungi melalui WhatsApp"><i class="bi bi-whatsapp"></i></a>
-        <a class="email" href="mailto:info@miliworayel.co.id?subject=Konsultasi%20Proyek" aria-label="Kirim email"><i class="bi bi-envelope-fill"></i></a>
+        @if($companyProfile?->whatsapp)<a class="whatsapp" href="https://wa.me/{{ preg_replace('/\D/', '', $companyProfile->whatsapp) }}" target="_blank" rel="noopener noreferrer" aria-label="Hubungi melalui WhatsApp"><i class="bi bi-whatsapp"></i></a>@endif
+        @if($companyProfile?->email)<a class="email" href="mailto:{{ $companyProfile->email }}?subject=Pertanyaan%20Perusahaan" aria-label="Kirim email"><i class="bi bi-envelope-fill"></i></a>@endif
         <a class="back-top" href="#beranda" aria-label="Kembali ke bagian atas"><i class="bi bi-arrow-up"></i></a>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" defer></script>
@@ -1291,7 +1257,6 @@
                         '#visi-misi .section-heading-center .eyebrow': '02 / ARAH PERUSAHAAN', '#visi-misi .section-heading-center .section-title': 'Membangun masa depan yang <span>berkelanjutan.</span>',
                         '#proyek .eyebrow': '04 / KAPABILITAS PROYEK', '#proyek .section-title': 'Dikerjakan dengan presisi, dijaga dengan <span>tanggung jawab.</span>',
                         '#mitra .eyebrow': '06 / MITRA KERJA', '#mitra .section-title': 'Bertumbuh melalui <span>kolaborasi.</span>',
-                        '#sertifikat .eyebrow': '07 / LEGALITAS & SERTIFIKAT', '#sertifikat .section-title': 'Bekerja dengan standar yang <span>terverifikasi.</span>',
                         '#testimoni .eyebrow': '08 / TESTIMONI MITRA', '#testimoni .section-title': 'Kepercayaan yang dibangun melalui <span>hasil kerja.</span>',
                         '#faq .eyebrow': '09 / PERTANYAAN UMUM', '#faq .section-title': 'Jawaban untuk membantu Anda memulai <span>proyek.</span>'
                     },
@@ -1299,7 +1264,6 @@
                         '#visi-misi .section-heading-center .eyebrow': '02 / COMPANY DIRECTION', '#visi-misi .section-heading-center .section-title': 'Building a sustainable <span>future.</span>',
                         '#proyek .eyebrow': '04 / PROJECT CAPABILITIES', '#proyek .section-title': 'Built with precision and <span>accountability.</span>',
                         '#mitra .eyebrow': '06 / PARTNERS', '#mitra .section-title': 'Growing through <span>collaboration.</span>',
-                        '#sertifikat .eyebrow': '07 / LEGALITY & CERTIFICATES', '#sertifikat .section-title': 'Working to verified <span>standards.</span>',
                         '#testimoni .eyebrow': '08 / PARTNER TESTIMONIALS', '#testimoni .section-title': 'Trust built through <span>results.</span>',
                         '#faq .eyebrow': '09 / FREQUENTLY ASKED QUESTIONS', '#faq .section-title': 'Answers to help you start a <span>project.</span>'
                     }

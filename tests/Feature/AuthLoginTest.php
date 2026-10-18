@@ -4,19 +4,33 @@ namespace Tests\Feature;
 
 use App\Models\Role;
 use App\Models\User;
-use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\AccessControlSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class AuthLoginTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_the_seeded_super_admin_can_log_in_with_username(): void
+    protected function setUp(): void
     {
-        $this->seed(DatabaseSeeder::class);
+        parent::setUp();
+        $this->seed(AccessControlSeeder::class);
+    }
+
+    public function test_a_verified_super_admin_can_log_in_with_username(): void
+    {
+        $role = Role::where('slug', 'super-admin')->firstOrFail();
+        User::factory()->create([
+            'name' => 'Administrator',
+            'email' => 'admin@example.test',
+            'username' => 'jiro',
+            'password' => Hash::make('jiro123'),
+            'email_verified_at' => now(),
+            'role_id' => $role->id,
+        ]);
 
         $this->post('/login', [
             'login' => ' jiro ',
@@ -51,7 +65,7 @@ class AuthLoginTest extends TestCase
 
     public function test_login_reports_an_incorrect_password(): void
     {
-        $role = Role::create(['name' => 'Admin', 'slug' => 'admin']);
+        $role = Role::where('slug', 'admin')->firstOrFail();
         $user = User::factory()->create([
             'role_id' => $role->id,
             'username' => 'admin-pengujian',
